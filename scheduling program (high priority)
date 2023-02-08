@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX_PROCESSES 10
+typedef struct {
+  int pid;
+  int priority;
+  int burst_time;
+  bool completed;
+} process;
+
+
+int get_highest_priority_process(process processes[], int n) {
+  int highest_priority_process = -1;
+  int highest_priority = -1;
+  for (int i = 0; i < n; i++) {
+    if (!processes[i].completed && processes[i].priority > highest_priority) {
+      highest_priority = processes[i].priority;
+      highest_priority_process = i;
+    }
+  }
+  return highest_priority_process;
+}
+
+int main() {
+  process processes[MAX_PROCESSES];
+  int n;
+  printf("Enter the number of processes: ");
+  scanf("%d", &n);
+
+  
+  for (int i = 0; i < n; i++) {
+    printf("Enter PID, Priority, and Burst Time for process %d: ", i + 1);
+    scanf("%d%d%d", &processes[i].pid, &processes[i].priority, &processes[i].burst_time);
+    processes[i].completed = false;
+  }
+
+
+  while (true) {
+    int highest_priority_process = get_highest_priority_process(processes, n);
+    if (highest_priority_process == -1) break;
+
+    printf("Executing process with PID %d and Priority %d\n",
+           processes[highest_priority_process].pid,
+           processes[highest_priority_process].priority);
+    processes[highest_priority_process].completed = true;
+  }
+
+  return 0;
+}
